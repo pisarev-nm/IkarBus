@@ -1,5 +1,19 @@
 package sample;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.qrcode.encoder.ByteMatrix;
+import com.itextpdf.text.*;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.qrcode.BitMatrix;
+import com.itextpdf.text.pdf.qrcode.ErrorCorrectionLevel;
+import com.itextpdf.text.pdf.qrcode.QRCodeWriter;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -7,6 +21,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -16,6 +32,12 @@ import model.TourEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import javax.imageio.ImageIO;
+import javax.print.Doc;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Timestamp;
@@ -23,10 +45,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.Iterator;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class BookingsController implements Initializable {
     @FXML private AnchorPane bookingsPane;
@@ -37,6 +58,7 @@ public class BookingsController implements Initializable {
     @FXML private TextField tfPassportNumber;
     @FXML private ChoiceBox cbTour;
     @FXML private DatePicker dpBirthDate;
+    @FXML private Button printButton;
     @FXML private TableView<BookingsEntity> tableviewBookings;
     @FXML private TableColumn<BookingsEntity, Integer> colID;
     @FXML private TableColumn<BookingsEntity, String> colTour;
@@ -49,6 +71,8 @@ public class BookingsController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resourses)
     {
+        //невидимая кнопка печати
+        printButton.setVisible(false);
         colID.setCellValueFactory(new PropertyValueFactory<BookingsEntity, Integer>("id"));
         colTour.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<BookingsEntity, String>, ObservableValue<String>>() {
             @Override
@@ -179,6 +203,8 @@ public class BookingsController implements Initializable {
 
     @FXML
     public void selectRow(MouseEvent mouseEvent) {
+        //видимая кнопка печати
+        printButton.setVisible(true);
         BookingsEntity selObject = tableviewBookings.getSelectionModel().getSelectedItem();
         tfID.setText(String.valueOf(selObject.getId()));
         tfFirstName.setText(selObject.getFirstName());
@@ -187,6 +213,81 @@ public class BookingsController implements Initializable {
         tfPassportNumber.setText(selObject.getPassportNum());
         dpBirthDate.setValue(selObject.getBirthDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         cbTour.setValue(selObject.getTourByTourId().getId() + ". " + selObject.getTourByTourId().getTourDate() + "  " + selObject.getTourByTourId().getRoutesByRouteId().getBusStopsByDestination().getCity() + " - " + selObject.getTourByTourId().getRoutesByRouteId().getBusStopsByArrival().getCity());
+    }
+
+
+
+//создание pdf файла
+    @FXML
+    public void printTicket(ActionEvent actionEvent)
+    {
+        try {
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream("C:/Users/Nikolay/IdeaProjects/IkarBus/ticket.pdf"));
+            document.open();
+            addPage(document);
+            document.close();
+            //Открыть созданный билет
+            Process p = Runtime
+                    .getRuntime()
+                    .exec("rundll32 url.dll,FileProtocolHandler C:\\Users\\Nikolay\\IdeaProjects\\IkarBus\\ticket.pdf");
+            p.waitFor();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+//создание страницы билета
+    public void addPage(Document document) throws DocumentException, IOException, WriterException {
+        Paragraph preface = new Paragraph();
+        //Подключение кирилицы
+        BaseFont tmr = BaseFont.createFont("/times.ttf", BaseFont.IDENTITY_H, true);
+        BaseFont tmrB = BaseFont.createFont("/timesbd.ttf", BaseFont.IDENTITY_H, true);
+        BaseFont tmrI = BaseFont.createFont("/timesi.ttf", BaseFont.IDENTITY_H, true);
+
+        // Заголовок
+        preface.add(new Paragraph("ИкарБус - IkarBus", new Font(tmrB, 30)));
+        // Добавление пустой строки
+        addEmptyLine(preface, 1);
+        //выбранный в таблице элемент
+        BookingsEntity printObject = tableviewBookings.getSelectionModel().getSelectedItem();
+        //добавление строки (параграфа)
+        preface.add(new Paragraph("Билет №: " + printObject.getId() + "", new Font(tmr, 14)));
+        addEmptyLine(preface, 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        preface.add(new Paragraph("Дата поездки: " + printObject.getTourByTourId().getTourDate().toLocalDateTime().toLocalDate().format(formatter) + " " + printObject.getTourByTourId().getTourDate().toLocalDateTime().toLocalTime(), new Font(tmr, 18)));
+        addEmptyLine(preface, 1);
+        preface.add(new Paragraph("Из: " + printObject.getTourByTourId().getRoutesByRouteId().getBusStopsByDestination().getCity() + "", new Font(tmr, 18)));
+        preface.add(new Paragraph("В: " + printObject.getTourByTourId().getRoutesByRouteId().getBusStopsByArrival().getCity() + "", new Font(tmr, 18)));
+        addEmptyLine(preface, 1);
+        preface.add(new Paragraph("Пассажир: " + printObject.getSecondName() + " " + printObject.getFirstName() + " " + printObject.getPatron() + ", рожд. " + new SimpleDateFormat("dd.MM.yyyy").format(printObject.getBirthDate()), new Font(tmr, 18)));
+        preface.add(new Paragraph("Номер паспорта: " + printObject.getPassportNum(), new Font(tmr, 18)));
+        addEmptyLine(preface, 1);
+        Image img = Image.getInstance(generateQR(printObject));
+        img.setAlignment(Element.ALIGN_CENTER);
+        preface.add(img);
+        addEmptyLine(preface, 7);
+        preface.add(new Paragraph("" + new Date()));
+
+        document.add(preface);
+        // Start a new page
+        document.newPage();
+    }
+    //пустая строка в пдф файле
+    public void addEmptyLine(Paragraph paragraph, int number) {
+        for (int i = 0; i < number; i++) {
+            paragraph.add(new Paragraph(" "));
+        }
+    }
+    //создание куар кода для билета
+    public String generateQR(BookingsEntity obj) throws WriterException, IOException {
+        String filename = "C:/Users/Nikolay/IdeaProjects/IkarBus/qr.jpg";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        String content = "Билет №" + obj.getId() + ".   " + obj.getTourByTourId().getTourDate().toLocalDateTime().toLocalDate().format(formatter) + ".   <<" + obj.getTourByTourId().getRoutesByRouteId().getBusStopsByDestination().getCity() + " - " + obj.getTourByTourId().getRoutesByRouteId().getBusStopsByArrival().getCity() + ">>   Пассажир: " + obj.getSecondName() + " " + obj.getFirstName() + " " + obj.getPatron() + ", рожд." + new SimpleDateFormat("dd.MM.yyyy").format(obj.getBirthDate()) + ",   паспорт №" + obj.getPassportNum();
+        Map<EncodeHintType, Object> hints = new HashMap<EncodeHintType, Object>();
+        hints.put(EncodeHintType.CHARACTER_SET, "windows-1251");
+        com.google.zxing.common.BitMatrix matrix = new MultiFormatWriter().encode(content, BarcodeFormat.QR_CODE, 250, 250, hints);
+        MatrixToImageWriter.writeToFile(matrix, filename.substring(filename.lastIndexOf('.')+1), new File(filename));
+        return filename;
     }
 
 }

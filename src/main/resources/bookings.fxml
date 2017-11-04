@@ -38,6 +38,7 @@
                   <Label layoutX="417.0" layoutY="158.0" text="Номер паспорта" />
                   <TextField fx:id="tfPassportNumber" layoutX="524.0" layoutY="154.0" prefHeight="25.0" prefWidth="165.0" promptText="Введите номер паспорта" />
                   <Button layoutX="884.0" layoutY="240.0" mnemonicParsing="false" onAction="#DelBooking" text="Удалить запись" />
+                  <Button fx:id="printButton" layoutX="14.0" layoutY="218.0" mnemonicParsing="false" onAction="#printTicket" prefHeight="44.0" prefWidth="143.0" text="Распечатать билет" />
                     </children>
                 </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="295.0" prefWidth="998.0">
