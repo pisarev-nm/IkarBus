@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="bookingsPane" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.BookingsController">
+    <children>
+        <SplitPane dividerPositions="0.4866220735785953" orientation="VERTICAL" prefHeight="600.0" prefWidth="1000.0">
+            <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="296.0" prefWidth="998.0">
+                    <children>
+                        <TextField fx:id="tfID" layoutX="523.0" layoutY="21.0" prefHeight="25.0" prefWidth="79.0" promptText="Введите ID" />
+                        <Label layoutX="456.0" layoutY="25.0" text="ID" />
+                        <Label layoutX="449.0" layoutY="57.0" text="Рейс" />
+                        <Button fx:id="btnAdd" layoutX="372.0" layoutY="218.0" mnemonicParsing="false" onAction="#AddBooking" prefHeight="44.0" prefWidth="302.0" text="Добавить в базу">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Button>
+                        <Button fx:id="backButton" layoutX="7.0" layoutY="8.0" mnemonicParsing="false" onAction="#goBack" text="&lt;" />
+                        <Label layoutX="437.0" layoutY="92.0" text="Фамилия" />
+                        <TextField fx:id="tfPatron" layoutX="523.0" layoutY="119.0" prefHeight="25.0" prefWidth="165.0" promptText="Введите отчество" />
+                        <Label layoutX="437.0" layoutY="123.0" text="Отчество" />
+                        <ChoiceBox fx:id="cbTour" layoutX="523.0" layoutY="53.0" prefHeight="25.0" prefWidth="368.0" />
+                  <TextField fx:id="tfSecondName" layoutX="523.0" layoutY="88.0" prefHeight="25.0" prefWidth="165.0" promptText="Введите фамилию" />
+                  <Label layoutX="704.0" layoutY="92.0" text="Имя" />
+                  <TextField fx:id="tfFirstName" layoutX="743.0" layoutY="88.0" promptText="Введите имя" />
+                  <Label layoutX="702.0" layoutY="123.0" text="Дата рождения" />
+                  <DatePicker fx:id="dpBirthDate" layoutX="801.0" layoutY="119.0" prefHeight="25.0" prefWidth="149.0" />
+                  <Label layoutX="417.0" layoutY="158.0" text="Номер паспорта" />
+                  <TextField fx:id="tfPassportNumber" layoutX="524.0" layoutY="154.0" prefHeight="25.0" prefWidth="165.0" promptText="Введите номер паспорта" />
+                  <Button layoutX="884.0" layoutY="240.0" mnemonicParsing="false" onAction="#DelBooking" text="Удалить запись" />
+                    </children>
+                </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="295.0" prefWidth="998.0">
+                    <children>
+                        <TableView fx:id="tableviewBookings" layoutX="-2.0" onMouseClicked="#selectRow" prefHeight="424.0" prefWidth="1000.0">
+                            <columns>
+                                <TableColumn fx:id="colID" prefWidth="50" text="ID" />
+                                <TableColumn fx:id="colTour" prefWidth="350" text="Рейс" />
+                                <TableColumn fx:id="colSecondName" prefWidth="150" text="Фамилия" />
+                                <TableColumn fx:id="colFirstName" prefWidth="120" text="Имя" />
+                                <TableColumn fx:id="colPatron" prefWidth="130" text="Отчество" />
+                                <TableColumn fx:id="colBirthDate" prefWidth="100" text="Дата рождения" />
+                                <TableColumn fx:id="colPassportNumber" prefWidth="100" text="Номер паспорта" />
+                            </columns>
+                        </TableView>
+                    </children></AnchorPane>
+            </items>
+        </SplitPane>
+    </children>
+</AnchorPane>

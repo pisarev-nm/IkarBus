@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="busStopsPane" prefHeight="600.0" prefWidth="1000" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.BusStopsController">
+   <children>
+      <SplitPane dividerPositions="0.28595317725752506" orientation="VERTICAL" prefHeight="600.0" prefWidth="1000.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="201.0" prefWidth="998.0">
+               <children>
+                  <TextField fx:id="tfID" layoutX="523.0" layoutY="21.0" promptText="Введите ID" />
+                  <TextField fx:id="tfCity" layoutX="523.0" layoutY="61.0" promptText="Введите город" />
+                  <Label layoutX="462.0" layoutY="25.0" text="ID" />
+                  <Label layoutX="451.0" layoutY="65.0" text="Город" />
+                  <Button fx:id="btnAdd" layoutX="348.0" layoutY="99.0" mnemonicParsing="false" onAction="#AddCity" prefHeight="44.0" prefWidth="302.0" text="Добавить в базу">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="backButton" layoutX="7.0" layoutY="8.0" mnemonicParsing="false" onAction="#goBack" text="&lt;" />
+                  <Button fx:id="btnDel" layoutX="884.0" layoutY="121.0" mnemonicParsing="false" onAction="#DelCity" text="Удалить запись" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <TableView fx:id="tableviewCity" editable="true" layoutX="-2.0" onMouseClicked="#selectRow" prefHeight="424.0" prefWidth="1000.0">
+                    <columns>
+                      <TableColumn fx:id="colID" prefWidth="300" style="-fx-text-alignment: right" text="ID" />
+                      <TableColumn fx:id="colCity" prefWidth="700" style="-fx-text-alignment: left" text="Город" />
+                    </columns>
+                  </TableView>
+               </children></AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

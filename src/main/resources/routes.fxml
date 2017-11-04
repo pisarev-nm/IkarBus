@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="routesPane" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.RoutesController">
+    <children>
+        <SplitPane dividerPositions="0.40301003344481606" orientation="VERTICAL" prefHeight="600.0" prefWidth="1000.0">
+            <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="201.0" prefWidth="998.0">
+                    <children>
+                        <TextField fx:id="tfID" layoutX="523.0" layoutY="21.0" promptText="Введите ID" />
+                        <Label layoutX="456.0" layoutY="25.0" text="ID" />
+                        <Label layoutX="418.0" layoutY="57.0" text="Отправление из" />
+                        <Button fx:id="btnAdd" layoutX="348.0" layoutY="170.0" mnemonicParsing="false" onAction="#AddRoute" prefHeight="44.0" prefWidth="302.0" text="Добавить в базу">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Button>
+                        <Button fx:id="backButton" layoutX="7.0" layoutY="8.0" mnemonicParsing="false" onAction="#goBack" text="&lt;" />
+                        <Label layoutX="429.0" layoutY="91.0" text="Прибытие в" />
+                        <TextField fx:id="tfCost" layoutX="523.0" layoutY="119.0" promptText="Введите стоимость" />
+                        <Label layoutX="409.0" layoutY="123.0" text="Стоимость проезда" />
+                  <ChoiceBox fx:id="cbDestination" layoutX="523.0" layoutY="53.0" prefWidth="150.0" />
+                  <ChoiceBox fx:id="cbArrival" layoutX="523.0" layoutY="87.0" prefWidth="150.0" />
+                  <Button layoutX="884.0" layoutY="192.0" mnemonicParsing="false" onAction="#DelRoute" text="Удалить запись" />
+                    </children>
+                </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="424.0" prefWidth="1030.0">
+                    <children>
+                        <TableView fx:id="tableviewRoutes" layoutX="-2.0" onMouseClicked="#selectRow" prefHeight="424.0" prefWidth="1000.0">
+                            <columns>
+                                <TableColumn fx:id="colID" prefWidth="100" text="ID" />
+                                <TableColumn fx:id="colDestination" prefWidth="350" text="Отправление из" />
+                                <TableColumn fx:id="colArrival" prefWidth="350" text="Прибытие в" />
+                                <TableColumn fx:id="colCost" prefWidth="200" text="Стоимость проезда" />
+                            </columns>
+                        </TableView>
+                    </children></AnchorPane>
+            </items>
+        </SplitPane>
+    </children>
+</AnchorPane>

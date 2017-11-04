@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="menu1pane" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.menu1Controller">
+   <children>
+      <SplitPane dividerPositions="0.3316633266533066" prefHeight="600.0" prefWidth="1000.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <Button fx:id="addBusStop" layoutX="15.0" layoutY="22.0" mnemonicParsing="false" onAction="#goToBusStops" prefHeight="36.0" prefWidth="298.0" text="Добавить пункт назначения" />
+                  <Button fx:id="addBus" layoutX="15.0" layoutY="75.0" mnemonicParsing="false" onAction="#goToBuses" prefHeight="36.0" prefWidth="298.0" text="Добавить транспорт" />
+                  <Button fx:id="addRoute" layoutX="15.0" layoutY="127.0" mnemonicParsing="false" onAction="#goToRoutes" prefHeight="36.0" prefWidth="298.0" text="Добавить маршрут" />
+                  <Button fx:id="addTour" layoutX="14.0" layoutY="179.0" mnemonicParsing="false" onAction="#goToToures" prefHeight="36.0" prefWidth="298.0" text="Добавить тур" />
+                  <Button fx:id="addBooking" layoutX="15.0" layoutY="230.0" mnemonicParsing="false" onAction="#goToBookings" prefHeight="36.0" prefWidth="298.0" text="Добавить бронирование" />
+               </children></AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>
