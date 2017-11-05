@@ -245,7 +245,10 @@ public class BookingsController implements Initializable {
         BaseFont tmrI = BaseFont.createFont("/timesi.ttf", BaseFont.IDENTITY_H, true);
 
         // Заголовок
-        preface.add(new Paragraph("ИкарБус - IkarBus", new Font(tmrB, 30)));
+        //preface.add(new Paragraph("ИкарБус - IkarBus", new Font(tmrB, 30)));
+        //Заголовок-логотип
+        Image logo = Image.getInstance("C:/Users/Nikolay/IdeaProjects/IkarBus/logo.jpg");
+        preface.add(logo);
         // Добавление пустой строки
         addEmptyLine(preface, 1);
         //выбранный в таблице элемент
@@ -261,12 +264,12 @@ public class BookingsController implements Initializable {
         addEmptyLine(preface, 1);
         preface.add(new Paragraph("Пассажир: " + printObject.getSecondName() + " " + printObject.getFirstName() + " " + printObject.getPatron() + ", рожд. " + new SimpleDateFormat("dd.MM.yyyy").format(printObject.getBirthDate()), new Font(tmr, 18)));
         preface.add(new Paragraph("Номер паспорта: " + printObject.getPassportNum(), new Font(tmr, 18)));
-        addEmptyLine(preface, 1);
-        Image img = Image.getInstance(generateQR(printObject));
-        img.setAlignment(Element.ALIGN_CENTER);
-        preface.add(img);
-        addEmptyLine(preface, 7);
-        preface.add(new Paragraph("" + new Date()));
+        addEmptyLine(preface, 4);
+        Image qr = Image.getInstance(generateQR(printObject));
+        qr.setAlignment(Element.ALIGN_CENTER);
+        preface.add(qr);
+        addEmptyLine(preface, 6);
+        preface.add(new Paragraph("" + new Date(), new Font(tmrI, 12)));
 
         document.add(preface);
         // Start a new page
